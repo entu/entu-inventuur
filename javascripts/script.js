@@ -196,10 +196,10 @@ angular.module('inventuurApp', ['ngRoute'])
                 })
             },
             items: function(callback) {
-                entu.getChilds($routeParams.parentId, { definition: $routeParams.definition }, callback)
+                entu.getChilds($routeParams.parentId, { definition: $routeParams.definition }, false, callback)
             },
             references: function(callback) {
-                entu.getEntities({ definition: $routeParams.reference }, callback)
+                entu.getEntities({ definition: $routeParams.reference }, false, callback)
             },
         }, function(error, result) {
             if(error) { return cl(error) }
