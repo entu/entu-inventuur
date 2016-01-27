@@ -228,6 +228,7 @@ angular.module('inventuurApp', ['ngRoute'])
         })
 
         $scope.isReferenceSet = function(ids) {
+            if(!ids) return
             return ids.indexOf($scope.sData.selectedReference) > -1
         }
 
