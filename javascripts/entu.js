@@ -87,7 +87,7 @@ var getEntity = function(entityId, callback) {
             for(var p in data.result.properties) {
                 if(!data.result.properties.hasOwnProperty(p)) { continue }
                 if(!data.result.properties[p].values) { continue }
-                entity[p] = data.result.properties[p].values
+                entity[data.result.properties[p].keyname] = data.result.properties[p].values
             }
 
             callback(null, entity)

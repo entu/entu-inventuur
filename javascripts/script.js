@@ -214,8 +214,9 @@ angular.module('inventuurApp', ['ngRoute'])
 
             for(var i in result.items) {
                 if(!result.items.hasOwnProperty(i)) { continue }
-                result.items[i]._referenceIds = []
                 if(!result.items[i][$routeParams.property]) { continue }
+
+                result.items[i]._referenceIds = []
                 for(var v in result.items[i][$routeParams.property]) {
                     if(!result.items[i][$routeParams.property].hasOwnProperty(v)) { continue }
                     result.items[i]._referenceIds.push(result.items[i][$routeParams.property][v].db_value)
@@ -226,7 +227,35 @@ angular.module('inventuurApp', ['ngRoute'])
             $scope.sData.references = result.references
         })
 
-        $scope.isReferenceSet = function(ids){
+        $scope.isReferenceSet = function(ids) {
             return ids.indexOf($scope.sData.selectedReference) > -1
+        }
+
+        $scope.setReference = function($event, item) {
+            if($event.target.checked) {
+                var properties = {}
+                properties[$routeParams.property] = $scope.sData.selectedReference
+                entu.changeEntity(item._id, properties,  function(error, property) {
+                    if(error) { return cl(error) }
+                    if(!property.properties) { return cl(property) }
+                    if(!property.properties[$routeParams.property]) { return cl(property) }
+                    if(!property.properties[$routeParams.property].id) { return cl(property) }
+                    if(!property.properties[$routeParams.property].value) { return cl(property) }
+
+                    item._referenceIds.push(property.properties[$routeParams.property].value)
+                })
+            } else {
+                for(var i in item[$routeParams.property]) {
+                    if(!item[$routeParams.property].hasOwnProperty(i)) { continue }
+                    if(item[$routeParams.property][i].db_value !== $scope.sData.selectedReference) { continue }
+
+                    var properties = {}
+                    properties[$routeParams.property + '.' + item[$routeParams.property][i].id] = ''
+                    entu.changeEntity(item._id, properties,  function(error, property) {
+                        if(error) { return cl(error) }
+                        if(!property.properties) { return cl(property) }
+                    })
+                }
+            }
         }
     }])
