@@ -196,7 +196,7 @@ angular.module('inventuurApp', ['ngRoute'])
                 })
             },
             items: function(callback) {
-                entu.getChilds($routeParams.parentId, { definition: $routeParams.definition }, false, callback)
+                entu.getChilds($routeParams.parentId, { definition: $routeParams.definition }, true, callback)
             },
             references: function(callback) {
                 entu.getEntities({ definition: $routeParams.reference }, false, callback)
@@ -204,7 +204,21 @@ angular.module('inventuurApp', ['ngRoute'])
         }, function(error, result) {
             if(error) { return cl(error) }
 
+            for(var i in result.items) {
+                if(!result.items.hasOwnProperty(i)) { continue }
+                result.items[i]._referenceIds = []
+                if(!result.items[i][$routeParams.property]) { continue }
+                for(var v in result.items[i][$routeParams.property]) {
+                    if(!result.items[i][$routeParams.property].hasOwnProperty(v)) { continue }
+                    result.items[i]._referenceIds.push(result.items[i][$routeParams.property][v].db_value)
+                }
+            }
+
             $scope.sData.items = result.items
             $scope.sData.references = result.references
         })
+
+        $scope.isReferenceSet = function(ids){
+            return ids.indexOf($scope.sData.selectedReference) > -1
+        }
     }])
