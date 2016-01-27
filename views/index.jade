@@ -19,7 +19,7 @@ html(ng-app='inventuurApp')
         nav.navbar.navbar-default.navbar-fixed-top
             .container
                 .navbar-left
-                    a.navbar-brand(ng-if='rData.user', href='/#/') {{ rData.user.name }}
+                    .navbar-brand(ng-if='rData.user') {{ rData.user.name }}
 
                 ul.nav.navbar-nav.navbar-left
                     li.navbar-text
@@ -27,11 +27,7 @@ html(ng-app='inventuurApp')
 
                 ul.nav.navbar-nav.navbar-right(ng-if='rData.user')
                     li
-                        a.glyphicon.glyphicon-log-out(href='/#/{{ rData.customer }}/logout')
-
-                ul.nav.navbar-nav.navbar-right(ng-if='!rData.user')
-                    li
-                        a.glyphicon.glyphicon-log-in(href='/#/{{ rData.customer }}/login')
+                        a(href='/#/{{ rData.customer }}/logout') Välju
 
         #content.container
             div(ng-view)
