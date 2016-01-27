@@ -80,8 +80,7 @@ angular.module('inventuurApp', ['ngRoute'])
             }
 
             ga('send', 'pageview', {
-                page: $location.path(),
-                title: $location.path()
+                page: $location.path()
             })
         })
     }])
@@ -195,6 +194,10 @@ angular.module('inventuurApp', ['ngRoute'])
                     }
                 })
             },
+            parent: function(callback) {
+                if(!$routeParams.parentId) { return callback(null) }
+                entu.getEntity($routeParams.parentId, callback)
+            },
             items: function(callback) {
                 if($routeParams.parentId === '*') {
                     entu.getEntities({ definition: $routeParams.definition }, true, callback)
@@ -223,6 +226,7 @@ angular.module('inventuurApp', ['ngRoute'])
                 }
             }
 
+            $scope.rData.pageTitle = result.parent ? result.parent._name : null
             $scope.sData.items = result.items
             $scope.sData.references = result.references
         })
