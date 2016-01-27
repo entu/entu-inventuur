@@ -1,13 +1,6 @@
 script(type='text/ng-template', id='items')
     div(ng-if='rData.user')
-
         .row.spacer
-
-        //- pre.col-xs-12 {{ sData.selectedReference | json }}
-
-
-
-        .row
             .col-xs-12.col-sm-7.col-md-8
                 .form-group
                     select.form-control(ng-disabled='sData.references.length < 1', ng-options='r._id as r._name for r in sData.references | orderBy : "_name"', ng-model='sData.selectedReference')
@@ -18,9 +11,7 @@ script(type='text/ng-template', id='items')
                     input.form-control(type='search', ng-model='search')
                     span.glyphicon.glyphicon-search.form-control-feedback(aria-hidden="true")
 
-        .row.spacer
-
-        .row(ng-if='sData.items.length > 0')
+        .row.spacer(ng-if='sData.items.length > 0')
             label.col-xs-12(ng-repeat='item in sData.items | filter : search | orderBy : "_name"', for='item-{{ item._id }}')
                 input(type='checkbox', id='item-{{ item._id }}', ng-checked='isReferenceSet(item._referenceIds)')
                 | {{ item._name }}
