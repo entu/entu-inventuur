@@ -12,7 +12,7 @@ angular.module('inventuurApp', ['ngRoute'])
     .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.html5Mode(false)
         $routeProvider
-            .when('/:customer', {
+            .when('/', {
                 templateUrl: 'start',
                 controller: 'startCtrl'
             })
@@ -28,13 +28,13 @@ angular.module('inventuurApp', ['ngRoute'])
                 templateUrl: 'start',
                 controller: 'logoutCtrl'
             })
-            .when('/:customer/:parentId/:definition', {
+            .when('/:customer/:definition/:parentId', {
                 templateUrl: 'items',
                 controller: 'itemsCtrl'
             })
-            // .otherwise({
-            //     redirectTo: '/'
-            // })
+            .otherwise({
+                redirectTo: '/'
+            })
     }])
 
 
@@ -126,21 +126,12 @@ angular.module('inventuurApp', ['ngRoute'])
 
 
 // LOGIN
-    .controller('loginCtrl', ['$http', '$location', '$routeParams', '$window', function($http, $location, $routeParams, $window) {
+    .controller('loginCtrl', ['$http', '$location', '$routeParams', function($http, $location, $routeParams) {
         entu.http = $http
         entu.url = 'https://' + $routeParams.customer + '.entu.ee'
 
-        var state = '1234567890abcdef'
-
-        $window.sessionStorage.clear()
-        $window.sessionStorage.setItem('state', state)
-
-        entu.getAuthUrl(state, $location.protocol() + '://' + location.host + '/#/' + $routeParams.customer + '/auth', function(error, data) {
+        entu.userLogin($location.protocol() + '://' + location.host + '/#/' + $routeParams.customer + '/auth', function(error) {
             if(error) { return cl(error) }
-            if(!data.auth_url) { return cl(data) }
-
-            $window.sessionStorage.setItem('authUrl', data.auth_url)
-            $window.location.href = data.auth_url
         })
     }])
 
@@ -148,22 +139,21 @@ angular.module('inventuurApp', ['ngRoute'])
 
 // AUTH AFTER LOGIN
     .controller('authCtrl', ['$http', '$routeParams', '$window', function($http, $routeParams, $window) {
-        var authUrl = $window.sessionStorage.getItem('authUrl')
-        var state = $window.sessionStorage.getItem('state')
+        entu.http = $http
+        entu.url = 'https://' + $routeParams.customer + '.entu.ee'
 
-        $http.post(authUrl, {state: state})
-            .success(function(data) {
-                $window.sessionStorage.clear()
-                $window.sessionStorage.setItem('userId', data.result.user.id)
-                $window.sessionStorage.setItem('userToken', data.result.user.session_key)
-                $window.sessionStorage.setItem('userName', data.result.user.name)
-                $window.sessionStorage.setItem('userEmail', data.result.user.email)
+        entu.userAuthenticate(function(error, user) {
+            if(error) { return cl(error) }
 
-                $window.location.href = '/#/' + $routeParams.customer + '/'
-            })
-            .error(function(error) {
-                cl(error)
-            })
+            var url = '/#/' + $routeParams.customer
+
+            if($window.sessionStorage.getItem('nextUrl')) {
+                url = '/#' + $window.sessionStorage.getItem('nextUrl')
+                $window.sessionStorage.removeItem('nextUrl')
+            }
+
+            $window.location.href = url
+        })
     }])
 
 
@@ -179,11 +169,9 @@ angular.module('inventuurApp', ['ngRoute'])
 
 
 // ITEMS
-    .controller('itemsCtrl', ['$scope', '$rootScope', '$http', '$routeParams', '$window', function($scope, $rootScope, $http, $routeParams, $window) {
+    .controller('itemsCtrl', ['$scope', '$rootScope', '$http', '$location', '$routeParams', '$window', function($scope, $rootScope, $http, $location, $routeParams, $window) {
         entu.http = $http
         entu.url = 'https://' + $routeParams.customer + '.entu.ee'
-        entu.userId = $window.sessionStorage.getItem('userId')
-        entu.userToken = $window.sessionStorage.getItem('userToken')
 
         if(!$rootScope.rData) { $rootScope.rData = {} }
 
@@ -197,7 +185,9 @@ angular.module('inventuurApp', ['ngRoute'])
             function getUser(callback) {
                 entu.getUser(function(error, user) {
                     if(error) {
-                        $rootScope.rData.user = null
+                        $window.sessionStorage.setItem('nextUrl', $location.path())
+                        $window.location.href = '/#/' + $routeParams.customer + '/login'
+
                         callback(error)
                     } else {
                         $rootScope.rData.user = user

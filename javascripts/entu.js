@@ -1,18 +1,45 @@
 var entu = {
     url: null,
-    userId: null,
-    userToken: null,
     http: null
 }
 
 
 
-entu.getAuthUrl = function(state, redirect_url, callback) {
-    entu.http.post(entu.url + '/api2/user/auth', {state: state, redirect_url: redirect_url})
+entu.userLogin = function(redirect_url, callback) {
+    var state = '1234567890abcdefg'
+
+    window.sessionStorage.setItem('authState', state)
+
+    entu.http.post(entu.url + '/api2/user/auth', {state: state, redirect_url: redirect_url}, callback)
         .success(function(data) {
             if(!data.result) { return callback(data) }
+            if(!data.result.auth_url) { return callback(data) }
 
-            callback(null, data.result)
+            window.sessionStorage.setItem('authUrl', data.result.auth_url)
+            window.location = data.result.auth_url
+
+            callback(null)
+        })
+        .error(callback)
+}
+
+
+
+entu.userAuthenticate = function(callback) {
+    entu.http.post(window.sessionStorage.getItem('authUrl'), {state: window.sessionStorage.getItem('authState')})
+        .success(function(data) {
+            if(!data.result) { return callback(data) }
+            if(!data.result.user) { return callback(data) }
+
+            window.sessionStorage.removeItem('authUrl')
+            window.sessionStorage.removeItem('authState')
+
+            window.sessionStorage.setItem('userId', data.result.user.id)
+            window.sessionStorage.setItem('userToken', data.result.user.session_key)
+            window.sessionStorage.setItem('userName', data.result.user.name)
+            window.sessionStorage.setItem('userEmail', data.result.user.email)
+
+            callback(null, data.result.user)
         })
         .error(callback)
 }
@@ -22,8 +49,8 @@ entu.getAuthUrl = function(state, redirect_url, callback) {
 entu.getUser = function(callback) {
     entu.http.get(entu.url + '/api2/user', {
             headers: {
-                'X-Auth-UserId': entu.userId,
-                'X-Auth-Token': entu.userToken
+                'X-Auth-UserId': window.sessionStorage.getItem('userId'),
+                'X-Auth-Token': window.sessionStorage.getItem('userToken')
             }
         })
         .success(function(data) {
@@ -45,8 +72,8 @@ entu.getUser = function(callback) {
 var getEntity = function(entityId, callback) {
     entu.http.get(entu.url + '/api2/entity-' + entityId, {
             headers: {
-                'X-Auth-UserId': entu.userId,
-                'X-Auth-Token': entu.userToken
+                'X-Auth-UserId': window.sessionStorage.getItem('userId'),
+                'X-Auth-Token': window.sessionStorage.getItem('userToken')
             }
         })
         .success(function(data) {
@@ -74,8 +101,8 @@ entu.getEntity = getEntity
 entu.getEntities = function(params, callback) {
     entu.http.get(entu.url + '/api2/entity', {
             headers: {
-                'X-Auth-UserId': entu.userId,
-                'X-Auth-Token': entu.userToken
+                'X-Auth-UserId': window.sessionStorage.getItem('userId'),
+                'X-Auth-Token': window.sessionStorage.getItem('userToken')
             },
             params: params
         })
@@ -95,8 +122,8 @@ entu.getEntities = function(params, callback) {
 entu.getChilds = function(entityId, params, callback) {
     entu.http.get(entu.url + '/api2/entity-' + entityId +'/childs', {
             headers: {
-                'X-Auth-UserId': entu.userId,
-                'X-Auth-Token': entu.userToken
+                'X-Auth-UserId': window.sessionStorage.getItem('userId'),
+                'X-Auth-Token': window.sessionStorage.getItem('userToken')
             },
             params: params
         })
@@ -123,8 +150,8 @@ entu.getChilds = function(entityId, params, callback) {
 entu.getReferrals = function(entityId, params, callback) {
     entu.http.get(entu.url + '/api2/entity-' + entityId +'/referrals', {
             headers: {
-                'X-Auth-UserId': entu.userId,
-                'X-Auth-Token': entu.userToken
+                'X-Auth-UserId': window.sessionStorage.getItem('userId'),
+                'X-Auth-Token': window.sessionStorage.getItem('userToken')
             },
             params: params
         })
@@ -152,8 +179,8 @@ entu.getReferrals = function(entityId, params, callback) {
 entu.addEntity = function(parentEntityId, properties, callback) {
     entu.http.post(entu.url + '/api2/entity-' + parentEntityId, properties, {
             headers: {
-                'X-Auth-UserId': entu.userId,
-                'X-Auth-Token': entu.userToken
+                'X-Auth-UserId': window.sessionStorage.getItem('userId'),
+                'X-Auth-Token': window.sessionStorage.getItem('userToken')
             }
         })
         .success(function(data) {
@@ -169,8 +196,8 @@ entu.addEntity = function(parentEntityId, properties, callback) {
 entu.changeEntity = function(entityId, properties, callback) {
     entu.http.put(entu.url + '/api2/entity-' + entityId, properties, {
             headers: {
-                'X-Auth-UserId': entu.userId,
-                'X-Auth-Token': entu.userToken
+                'X-Auth-UserId': window.sessionStorage.getItem('userId'),
+                'X-Auth-Token': window.sessionStorage.getItem('userToken')
             }
         })
         .success(function(data) {
@@ -186,8 +213,8 @@ entu.changeEntity = function(entityId, properties, callback) {
 entu.getErply = function(method, params, callback) {
     entu.http.post(erplyAPI + method, params, {
             headers: {
-                'X-Auth-UserId': entu.userId,
-                'X-Auth-Token': entu.userToken
+                'X-Auth-UserId': window.sessionStorage.getItem('userId'),
+                'X-Auth-Token': window.sessionStorage.getItem('userToken')
             }
         })
         .success(function(data) {
