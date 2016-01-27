@@ -28,7 +28,7 @@ angular.module('inventuurApp', ['ngRoute'])
                 templateUrl: 'start',
                 controller: 'logoutCtrl'
             })
-            .when('/:customer/:definition/:property/:reference/:parentId', {
+            .when('/:customer/:parentId/:definition/:property/:referenceParentId/:referenceDefinition', {
                 templateUrl: 'items',
                 controller: 'itemsCtrl'
             })
@@ -196,10 +196,18 @@ angular.module('inventuurApp', ['ngRoute'])
                 })
             },
             items: function(callback) {
-                entu.getChilds($routeParams.parentId, { definition: $routeParams.definition }, true, callback)
+                if($routeParams.parentId === '*') {
+                    entu.getEntities({ definition: $routeParams.definition }, true, callback)
+                } else {
+                    entu.getChilds($routeParams.parentId, { definition: $routeParams.definition }, true, callback)
+                }
             },
             references: function(callback) {
-                entu.getEntities({ definition: $routeParams.reference }, false, callback)
+                if($routeParams.referenceParentId === '*') {
+                    entu.getEntities({ definition: $routeParams.referenceDefinition }, false, callback)
+                } else {
+                    entu.getChilds($routeParams.referenceParentId, { definition: $routeParams.referenceDefinition }, false, callback)
+                }
             },
         }, function(error, result) {
             if(error) { return cl(error) }
