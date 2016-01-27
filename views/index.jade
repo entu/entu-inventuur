@@ -1,0 +1,52 @@
+doctype html
+html(ng-app='inventuurApp')
+    head
+        title Inventuur
+
+        meta(charset='utf-8')
+        meta(name='viewport', content='initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, minimal-ui')
+        meta(name='apple-mobile-web-app-capable', content='yes')
+
+        link(rel='stylesheet', type='text/css', href='https://fonts.googleapis.com/css?family=Raleway:400,700,300')
+
+        style @@include('stylesheet.css')
+
+        script (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/a8si2rq4';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
+
+        script @@include('javascript.js')
+
+    body
+        nav.navbar.navbar-default.navbar-fixed-top
+            .container
+                .navbar-left
+                    a.navbar-brand(ng-if='rData.user', href='/#/') {{ rData.user.name }}
+
+                ul.nav.navbar-nav.navbar-left
+                    li.navbar-text
+                        img(is-loading, src='/images/loader.gif')
+
+                ul.nav.navbar-nav.navbar-right(ng-if='rData.user')
+                    li
+                        a.glyphicon.glyphicon-log-out(href='/#/{{ rData.customer }}/logout')
+
+                ul.nav.navbar-nav.navbar-right(ng-if='!rData.user')
+                    li
+                        a.glyphicon.glyphicon-log-in(href='/#/{{ rData.customer }}/login')
+
+        #content.container
+            div(ng-view)
+
+        .container
+            .row.spacer
+
+        include start
+        include items
+
+    script.
+        $(window).scroll(function(event) {
+            if($(window).scrollTop() > 10) {
+                $('.navbar').addClass('navbar-border')
+            } else {
+                $('.navbar').removeClass('navbar-border')
+            }
+        })
