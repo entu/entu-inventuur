@@ -81,7 +81,7 @@ angular.module('inventuurApp', ['ngRoute'])
 
             ga('send', 'pageview', {
                 page: $location.path(),
-                title: $location.path().substring(1).replace('/', ' - ')
+                title: $location.path()
             })
         })
     }])
