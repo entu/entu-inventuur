@@ -28,7 +28,7 @@ angular.module('inventuurApp', ['ngRoute'])
                 templateUrl: 'start',
                 controller: 'logoutCtrl'
             })
-            .when('/:customer/:definition/:parentId', {
+            .when('/:customer/:definition/:property/:reference/:parentId', {
                 templateUrl: 'items',
                 controller: 'itemsCtrl'
             })
@@ -181,8 +181,8 @@ angular.module('inventuurApp', ['ngRoute'])
             items: []
         }
 
-        async.waterfall([
-            function getUser(callback) {
+        async.parallel({
+            user: function(callback) {
                 entu.getUser(function(error, user) {
                     if(error) {
                         $window.sessionStorage.setItem('nextUrl', $location.path())
@@ -195,12 +195,16 @@ angular.module('inventuurApp', ['ngRoute'])
                     }
                 })
             },
-            function getItems(callback) {
+            items: function(callback) {
                 entu.getChilds($routeParams.parentId, { definition: $routeParams.definition }, callback)
             },
-        ], function(error, items) {
+            references: function(callback) {
+                entu.getEntities({ definition: $routeParams.reference }, callback)
+            },
+        }, function(error, result) {
             if(error) { return cl(error) }
 
-            $scope.sData.items = items
+            $scope.sData.items = result.items
+            $scope.sData.references = result.references
         })
     }])

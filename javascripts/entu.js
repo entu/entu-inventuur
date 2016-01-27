@@ -108,7 +108,7 @@ entu.getEntities = function(params, callback) {
         })
         .success(function(data) {
             if(!data.result) { return callback(data) }
-            if(data.result.length === 0) { return callback(data) }
+            if(data.result.length === 0) { return callback(null, []) }
 
             async.map(data.result, function(entity, callback) {
                 entu.getEntity(entity.id, callback)
