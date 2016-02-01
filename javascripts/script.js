@@ -63,7 +63,7 @@ angular.module('inventuurApp', ['ngRoute'])
 
 
 // UPDATE GOOGLE ANALYTICS & INTERCOM
-    .run(['$rootScope', '$location', '$window', function($rootScope, $location, $window) {
+    .run(['$rootScope', '$location', '$routeParams', '$window', function($rootScope, $location, $routeParams, $window) {
         $rootScope.$on('$routeChangeSuccess', function() {
             if($window.sessionStorage.getItem('userEmail') && $window.sessionStorage.getItem('userName') && $window.sessionStorage.getItem('userEmail')) {
                 window.Intercom('boot', {
@@ -73,8 +73,7 @@ angular.module('inventuurApp', ['ngRoute'])
                     email: $window.sessionStorage.getItem('userEmail'),
                     created_at: new Date().getTime(),
                     company: {
-                        id: "nommelumepark",
-                        name: "Nõmme Lumepark"
+                        id: $routeParams.customer
                     }
                 })
             }
