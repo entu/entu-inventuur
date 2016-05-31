@@ -14,7 +14,7 @@ script(type='text/ng-template', id='items')
         .row.spacer(ng-if='sData.items.length > 0')
             label.col-xs-12(ng-repeat='item in sData.items | filter : search | orderBy : "_name"', for='item-{{ item._id }}')
                 input(ng-disabled='!sData.selectedReference', type='checkbox', id='item-{{ item._id }}', ng-checked='isReferenceSet(item._referenceIds)', ng-click='setReference($event, item)')
-                | {{ item._name }}
+                | {{ item._name }} | {{ item._info | limitTo:50 }}
 
         .row.spacer(ng-if='sData.items.length > 0')
             .col-xs-12.text-center {{ sData.items.length }}
