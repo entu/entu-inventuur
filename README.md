@@ -2,8 +2,7 @@
 
 
 ### URL
-/:customer/:parentId/:definition/:property/:referenceParentId/:referenceDefinition
-
+/ customer / parentId / definition / property / referenceParentId / referenceDefinition
 
 ### LICENSE
 The MIT License (MIT)
