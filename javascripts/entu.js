@@ -82,6 +82,7 @@ var getEntity = function(entityId, callback) {
             var entity = {
                 _id: data.result.id,
                 _name: data.result.displayname,
+                _longname: data.result.displaytable.join(' | '),
                 _info: data.result.displayinfo
             }
             for(var p in data.result.properties) {
