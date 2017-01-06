@@ -78,6 +78,7 @@ var getEntity = function(entityId, callback) {
         })
         .success(function(data) {
             if(!data.result) { return callback(data) }
+            console.log(data.result);
             if(!data.result.displaytable) { return callback(data) }
 
             var entity = {
