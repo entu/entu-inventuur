@@ -11,6 +11,7 @@ angular.module('inventuurApp', ['ngRoute'])
 //ROUTER
     .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.html5Mode(false)
+        $locationProvider.hashPrefix('')
         $routeProvider
             .when('/', {
                 templateUrl: 'start',
