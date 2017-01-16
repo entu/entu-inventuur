@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         jade: {
             html: {
                 options: {
-                    pretty: true,
+                    pretty: false,
                 },
                 files: [{
                     expand: true,
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
         uglify: {
             application: {
                 options: {
-                    beautify: true
+                    beautify: false
                 },
                 files: {
                     'tmp/javascript.js': [
