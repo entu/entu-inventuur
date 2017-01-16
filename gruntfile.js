@@ -52,6 +52,9 @@ module.exports = function(grunt) {
         },
         uglify: {
             application: {
+                options: {
+                    beautify: true
+                },
                 files: {
                     'tmp/javascript.js': [
                         'bower_components/jquery/dist/jquery.js',
