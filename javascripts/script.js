@@ -63,22 +63,9 @@ angular.module('inventuurApp', ['ngRoute'])
 
 
 
-// UPDATE GOOGLE ANALYTICS & INTERCOM
+// UPDATE GOOGLE ANALYTICS
     .run(['$rootScope', '$location', '$routeParams', '$window', function($rootScope, $location, $routeParams, $window) {
         $rootScope.$on('$routeChangeSuccess', function() {
-            if($window.sessionStorage.getItem('userEmail') && $window.sessionStorage.getItem('userName') && $window.sessionStorage.getItem('userEmail')) {
-                window.Intercom('boot', {
-                    app_id: 'a8si2rq4',
-                    user_id: $window.sessionStorage.getItem('userEmail'),
-                    name: $window.sessionStorage.getItem('userName'),
-                    email: $window.sessionStorage.getItem('userEmail'),
-                    created_at: new Date().getTime(),
-                    company: {
-                        id: $routeParams.customer
-                    }
-                })
-            }
-
             ga('send', 'pageview', {
                 page: $location.path()
             })
