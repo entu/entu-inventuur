@@ -1,5 +1,4 @@
-# Inventory service for Entu.ee
+Inventory service for Entu.ee
 
-
-### URL
+**URL**:
 / customer / parentId / definition / property / referenceParentId / referenceDefinition
