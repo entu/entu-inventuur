@@ -3,6 +3,9 @@
     "version": "0.1.0",
     "author": "Argo Roots <argo@roots.ee>",
     "private": true,
+    "scripts": {
+        "build": "grunt build"
+    },
     "devDependencies": {
         "grunt-contrib-clean": "*",
         "grunt-contrib-connect": "*",
@@ -14,5 +17,5 @@
         "grunt-contrib-watch": "*",
         "grunt-include-replace": "*",
         "grunt": "*"
-   }
+    }
 }
