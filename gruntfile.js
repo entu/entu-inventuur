@@ -71,7 +71,7 @@ module.exports = function(grunt) {
         includereplace: {
             all: {
                 files: {
-                    'index.html': ['tmp/index.html']
+                    'dist/index.html': ['tmp/index.html']
                 }
             }
         },
