@@ -2,7 +2,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         clean: {
             build: {
-                src: ['tmp', 'fonts']
+                src: ['tmp', 'dist']
             },
             postbuild: {
                 src: ['tmp']
@@ -11,7 +11,13 @@ module.exports = function(grunt) {
         copy: {
             glyphicons: {
                 src: ['bower_components/bootstrap/fonts/*.*'],
-                dest: 'fonts',
+                dest: 'dist/fonts',
+                expand: true,
+                flatten: true,
+            },
+            images: {
+                src: ['src/images/*.*'],
+                dest: 'dist/images',
                 expand: true,
                 flatten: true,
             }
@@ -23,7 +29,7 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: 'views',
+                    cwd: 'src/views',
                     src: ['index.jade'],
                     dest: 'tmp',
                     ext: '.html'
@@ -33,7 +39,7 @@ module.exports = function(grunt) {
         stylus: {
             css: {
                 files: {
-                    'tmp/application.css': ['stylesheets/*.styl']
+                    'tmp/application.css': ['src/stylesheets/*.styl']
                 }
             }
         },
@@ -63,7 +69,7 @@ module.exports = function(grunt) {
                         'bower_components/angular-route/angular-route.js',
                         'bower_components/async/dist/async.js',
                         'bower_components/datejs/build/date.js',
-                        'javascripts/*.js'
+                        'src/javascripts/*.js'
                     ]
                 }
             }
