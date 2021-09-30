@@ -19,6 +19,7 @@ html(ng-app='inventuurApp')
             .container
                 .navbar-left
                     .navbar-brand(ng-if='rData.pageTitle') {{ rData.pageTitle }}
+                    .navbar-text
                         img(is-loading, src='/images/loader.gif')
 
                 ul.nav.navbar-nav.navbar-right(ng-if='rData.user')
