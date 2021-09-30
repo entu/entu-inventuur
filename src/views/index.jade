@@ -23,7 +23,7 @@ html(ng-app='inventuurApp')
 
                 ul.nav.navbar-nav.navbar-right(ng-if='rData.user')
                     li
-                        a.text-warning(href='/#/{{ rData.customer }}/logout', title='{{ rData.user }}') Välju
+                        a.text-warning(href='/#/{{ rData.customer }}/logout', title='{{ rData.user.name }}') Välju
 
         #content.container
             div(ng-view)
