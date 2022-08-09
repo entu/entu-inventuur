@@ -1,5 +1,5 @@
-node_modules
 bower_components
-tmp
-fonts
 dist
+fonts
+node_modules
+tmp
