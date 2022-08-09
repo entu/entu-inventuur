@@ -22,7 +22,7 @@ module.exports = function(grunt) {
                 flatten: true,
             }
         },
-        jade: {
+        pug: {
             html: {
                 options: {
                     pretty: false,
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/views',
-                    src: ['index.jade'],
+                    src: ['index.pug'],
                     dest: 'tmp',
                     ext: '.html'
                 }]
@@ -93,15 +93,15 @@ module.exports = function(grunt) {
         watch: {
             stylesheets: {
                 files: '**/*.styl',
-                tasks: ['stylus', 'cssmin:application', 'jade', 'includereplace']
+                tasks: ['stylus', 'cssmin:application', 'pug', 'includereplace']
             },
             scripts: {
                 files: '**/*.js',
-                tasks: ['uglify:application', 'jade', 'includereplace']
+                tasks: ['uglify:application', 'pug', 'includereplace']
             },
-            jade: {
-                files: '**/*.jade',
-                tasks: ['jade', 'includereplace']
+            pug: {
+                files: '**/*.pug',
+                tasks: ['pug', 'includereplace']
             },
         }
     })
@@ -110,7 +110,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect')
     grunt.loadNpmTasks('grunt-contrib-copy')
     grunt.loadNpmTasks('grunt-contrib-cssmin')
-    grunt.loadNpmTasks('grunt-contrib-jade')
+    grunt.loadNpmTasks('grunt-contrib-pug')
     grunt.loadNpmTasks('grunt-contrib-stylus')
     grunt.loadNpmTasks('grunt-contrib-uglify')
     grunt.loadNpmTasks('grunt-contrib-watch')
@@ -119,7 +119,7 @@ module.exports = function(grunt) {
     grunt.registerTask(
         'prepare',
         'Compiles all of the assets and copies the files to the build directory.',
-        ['clean:build', 'copy', 'jade', 'stylus', 'cssmin', 'uglify', 'includereplace']
+        ['clean:build', 'copy', 'pug', 'stylus', 'cssmin', 'uglify', 'includereplace']
     )
 
     grunt.registerTask(
