@@ -1,7 +1,6 @@
 name: Grunt Build
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches:
       - main
@@ -17,7 +16,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 jobs:
